@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Upload</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+</head>
+<body>
+<br /><br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">File upload failed. Please try again.</div>
+            </div>
+            <div th:if="${param.success}">
+                <div class="alert alert-success">Photo uploaded successfully!</div>
+            </div>
+
+            <div>
+                <form method="get" action="/search">
+                    <label for="query">Search by Title:</label>
+                    <input type="text" name="query" id="query" th:value="${query}" placeholder="Enter title">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Upload a Photo</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/upload" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        <div class="form-group mb-3">
+                            <label for="file" class="control-label">Choose a photo</label>
+                            <input type="file" id="file" name="file" class="form-control" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <button type="submit" class="btn btn-primary w-100">Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <h3 class="mt-4">Uploaded Photos</h3>
+            <ul class="list-group">
+                <li th:each="photo : ${photos}" class="list-group-item d-flex justify-content-between align-items-center">
+                    <img th:src="@{${photo.imageLink}}" alt="Photo" width="150" class="mr-3">
+                    <div>
+                        <span th:text="${photo.imageName}"></span>
+                    </div>
+                    <form action="/delete/{id}" method="post" th:action="@{/delete/{id}(id=${photo.id})}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Скрипты для Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-X6tacr7Do5NWrJebnYQhtT0V3tKxLpx5Yy7k4Oj5DAzJ8gZSm2c78J9K73/Mm6wo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-pzjw8f+ua7Kw1TIq0n0vI3y1XswejA5f5PbPi9vV7z8z5TnXvsj4c5vTWeS6BlFf"
+        crossorigin="anonymous"></script>
+</body>
+</html>
